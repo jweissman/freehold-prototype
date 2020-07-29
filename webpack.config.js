@@ -53,7 +53,7 @@ module.exports = ({ mode, presets } = { mode: "production", presets: [] }) => {
     plugins: [
       new CleanWebpackPlugin({}),
       new HtmlWebPackPlugin({
-        title: 'Excalibur Webpack Sample'
+        title: 'Freehold'
       })
     ]
   },

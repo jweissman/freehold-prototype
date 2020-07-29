@@ -9,4 +9,8 @@ export class Player extends ex.Actor {
       color: new ex.Color(255, 255, 255)
     });
   }
+
+  onPreUpdate(engine: ex.Engine) {
+    this.pos = engine.input.pointers.primary.lastScreenPos
+  }
 }
