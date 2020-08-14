@@ -1,0 +1,1 @@
+export const average = (...nums: number[]) => nums.reduce((sum, num) => sum + num, 0) / nums.length

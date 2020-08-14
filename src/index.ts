@@ -3,12 +3,15 @@ import { Play } from './scenes/level-one/play';
 import { Player } from './actors/player/player';
 import { World } from './models/world';
 import { Resources } from './resources';
+import { Cursor } from './actors/cursor/cursor';
+import { OVERWORLD } from './constants';
+
 
 export class Game extends ex.Engine {
   world: World
   constructor() {
     super({ width: 800, height: 600, displayMode: ex.DisplayMode.FullScreen });
-    this.world = new World();
+    this.world = World.gen() //new World({ width: 80, height: 60 });
     // this.input.pointers.primary.
   }
 
@@ -18,22 +21,26 @@ export class Game extends ex.Engine {
 }
 
 const game = new Game();
-const play = new Play(game);
+const overworld = new Play(game);
+const cursor = new Cursor();
+// cursor.addDrawing(Resources.Sword)
 const player = new Player();
-player.addDrawing(Resources.Sword);
 
-play.add(player);
+// player.addAn
+// player.addDrawing();
 
-game.add('levelOne', play);
+overworld.add(player);
+overworld.add(cursor);
 
+game.add(OVERWORLD, overworld);
 
 let loader = new ex.Loader();
-loader.playButtonText = "Let's go!"
-// loader.suppressPlayButton = true;
+// loader.playButtonText = "Let's go!"
+loader.suppressPlayButton = true;
 for (let key in Resources) {
   loader.addResource(Resources[key]);
 }
 
 game.start(loader).then(() => {
-  game.goToScene('levelOne');
+  game.goToScene(OVERWORLD);
 });
