@@ -10,9 +10,13 @@ import { OVERWORLD } from './constants';
 export class Game extends ex.Engine {
   world: World
   constructor() {
-    super({ width: 800, height: 600, displayMode: ex.DisplayMode.FullScreen });
-    this.world = World.gen() //new World({ width: 80, height: 60 });
-    // this.input.pointers.primary.
+    super({
+      width: 800,
+      height: 600,
+      displayMode: ex.DisplayMode.FullScreen,
+      canvasElementId: 'game',
+    });
+    this.world = World.gen()
   }
 
   public start(loader: ex.Loader) {
@@ -20,27 +24,19 @@ export class Game extends ex.Engine {
   }
 }
 
+console.log("CREATE GAME...")
 const game = new Game();
 const overworld = new Play(game);
-const cursor = new Cursor();
-// cursor.addDrawing(Resources.Sword)
-const player = new Player();
-
-// player.addAn
-// player.addDrawing();
-
-overworld.add(player);
-overworld.add(cursor);
-
 game.add(OVERWORLD, overworld);
 
 let loader = new ex.Loader();
-// loader.playButtonText = "Let's go!"
 loader.suppressPlayButton = true;
 for (let key in Resources) {
   loader.addResource(Resources[key]);
 }
 
+console.log("load game")
 game.start(loader).then(() => {
+  console.log("start game")
   game.goToScene(OVERWORLD);
 });

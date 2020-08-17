@@ -53,7 +53,8 @@ module.exports = ({ mode, presets } = { mode: "production", presets: [] }) => {
     plugins: [
       new CleanWebpackPlugin({}),
       new HtmlWebPackPlugin({
-        title: 'Freehold'
+        title: 'Freehold',
+        template: 'index.html'
       })
     ]
   },

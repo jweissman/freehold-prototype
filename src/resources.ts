@@ -1,4 +1,5 @@
 import * as ex from 'excalibur';
+import { OVERWORLD_CELL_SIZE } from './constants';
 const sword = require('./images/sword.png');
 const fruit = require('./images/fruit.png');
 const terrain = require('./images/terrain.png');
@@ -11,10 +12,11 @@ let Resources = {
   Peasant: new ex.Texture(peasant),
 }
 
+let sz = OVERWORLD_CELL_SIZE
 let SpriteSheets = {
-  Fruit: new ex.SpriteSheet(Resources.Fruit, 5, 1, 16, 16),
-  Terrain: new ex.SpriteSheet(Resources.Terrain, 8, 4, 16, 16),
-  Peasant: new ex.SpriteSheet(Resources.Peasant, 4, 4, 16, 16),
+  Fruit: new ex.SpriteSheet(Resources.Fruit, 3, 2, sz, sz),
+  Terrain: new ex.SpriteSheet(Resources.Terrain, 8, 8, sz, sz),
+  Peasant: new ex.SpriteSheet(Resources.Peasant, 4, 4, sz, sz),
 }
 
 export { Resources, SpriteSheets }
