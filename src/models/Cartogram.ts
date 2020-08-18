@@ -6,6 +6,7 @@ import { SOUTHEAST, NORTHWEST, NORTH, NORTHEAST, WEST, EAST, SOUTHWEST, SOUTH } 
 import { times } from "../util/times";
 
 export class Cartogram {
+  
   // private cells: number[][] = [];
   constructor(public name: string, public dims: Dimensions, public cells: number[][] = []) {
   }
@@ -42,10 +43,30 @@ export class Cartogram {
     }, (y) => this.cells[y] = [])
   }
 
+  distributeWithin(source: number, value: number, rate: number) {
+    let places = []
+    // throw new Error("Method not implemented.");
+
+    this.eachPosition((x, y) => {
+      if (this.at(x,y) == source) {
+        if (this.neighbors(x, y).every(val => val == source)) {
+          places.push([x,y])
+          // this.set(x,y, pick(value, source))
+
+        }
+      }
+    })
+
+    places.forEach(([x,y]) => {
+      this.set(x,y, pick(value, ...times(rate,source)))
+
+    })
+  }
+
   copy(newName: string): Cartogram {
     let newCells = [] //this.cells.slice()
     this.eachPosition((x, y) => {
-      newCells[y][x] = this.at(x,y)
+      newCells[y][x] = this.at(x, y)
     }, (y) => newCells[y] = [])
     // for ()
     let newMap = new Cartogram(newName, this.dims, newCells)
@@ -96,9 +117,9 @@ export class Cartogram {
   //   ]
   //     // .filter(([x, y]) => this.withinBounds(x, y))
   //     .map(([x, y]) => this.cells[y][x])
-  // }
+  // } 
   neighbors(x: number, y: number): number[] {
-    return [
+     return [
       [x - 1, y - 1], [x, y - 1], [x + 1, y - 1],
       [x - 1, y], , [x + 1, y],
       [x - 1, y + 1], [x, y + 1], [x + 1, y + 1]
@@ -108,15 +129,16 @@ export class Cartogram {
   }
 
   labelledNeighbors(x: number, y: number, defaultValue: number = 0) {
+    let self = this.at(x,y)
     return {
-      [NORTHWEST]: this.at(x - 1, y - 1) || defaultValue,
-      [NORTH]: this.at(x, y - 1) || defaultValue,
-      [NORTHEAST]: this.at(x + 1, y - 1) || defaultValue,
-      [WEST]: this.at(x - 1, y) || defaultValue,
-      [EAST]: this.at(x + 1, y) || defaultValue,
-      [SOUTHWEST]: this.at(x - 1, y + 1) || defaultValue,
-      [SOUTH]: this.at(x, y + 1) || defaultValue,
-      [SOUTHEAST]: this.at(x + 1, y + 1) || defaultValue
+      [NORTHWEST]: this.at(x - 1, y - 1), // || self, // || defaultValue,
+      [NORTH]: this.at(x, y - 1), // || self, // || defaultValue,
+      [NORTHEAST]: this.at(x + 1, y - 1), // || self, // || defaultValue,
+      [WEST]: this.at(x - 1, y), // || self, // || defaultValue,
+      [EAST]: this.at(x + 1, y), // || self, // || defaultValue,
+      [SOUTHWEST]: this.at(x - 1, y + 1), // || self, // || defaultValue,
+      [SOUTH]: this.at(x, y + 1), // || self, // || defaultValue,
+      [SOUTHEAST]: this.at(x + 1, y + 1), // || self, // || defaultValue
     }
       // .filter(([x, y]) => this.withinBounds(x, y))
       // .map(([x, y]) => this.cells[y][x])

@@ -2,7 +2,7 @@
 // scenes
 export const OVERWORLD = 'overworld'
 
-export const OVERWORLD_CELL_SIZE = 32;
+export const OVERWORLD_CELL_SIZE = 64;
 
 // anims
 export const PEASANT_WALK_RIGHT = 'peasant/walk_right'
@@ -17,11 +17,51 @@ export const PEASANT_FACE_UP =    'peasant/face_up'
 export const PEASANT_IDLE = 'peasant/idle'
 
 // terrain
-export const GRASS = 15;
-export const WATER = 16;
+export const GRASS = 0;
+export const WATER = 1;
+export const TREES = 3;
 // export const MOUNTAIN = 2;
 
 // pretty terrain
+          // [self] [east] [south] [southeast]
+export const WATER_GRASS_INTERFACE = [
+      [1,2,17],  // 0000 -- all water
+      [11], // 0001 -- grass at bottom-right corner
+      [13], // 0010 -- grass at bottom-left corner
+      [25], // 0011 -- grass on bottom side
+      [27], // 0100 -- grass at top-right corner
+      [18], // 0101 -- grass on right side
+      [14], // 0110 -- grass w/ gap bottom-left to top-right
+      [26],  // 0111 -- water at top-left corner
+      [29], // 1000 -- grass at top-left
+      [15], // 1001 -- grass w/ gap top-left to bottom-right
+      [21], // 1010 -- grass on left side
+      [24], // 1011 -- water at top-right corner
+      [28], // 1100 -- grass on top side
+      [10], // 1101 -- water at bottom-left corner
+      [8], // 1110 -- water at bottom-right corner
+      [0,20] // 1111 -- all grass
+    ];
+
+      // [self] [east] [south] [southeast]
+export const TREE_GRASS_INTERFACE: number[][] = [
+      [41],  // 0000 -- all tree
+      [35], // 0001 -- grass at bottom-right corner
+      [37], // 0010 -- grass at bottom-left corner
+      [36], // 0011 -- grass on bottom side
+      [51], // 0100 -- grass at top-right corner
+      [43], // 0101 -- grass on right side
+      [38], // 0110 -- grass w/ gap bottom-left to top-right
+      [50],  // 0111 -- tree at top-left corner
+      [53], // 1000 -- grass at top-left
+      [39], // 1001 -- grass w/ gap top-left to bottom-right
+      [45], // 1010 -- grass on left side
+      [48], // 1011 -- tree at top-right corner
+      [52], // 1100 -- grass on top side
+      [34], // 1101 -- tree at bottom-left corner
+      [32], // 1110 -- tree at bottom-right corner
+      [0,20] // 1111 -- all grass
+    ]
 // export const WATER_WITH_GRASS_NORTH = 9;
 // export const WATER_WITH_GRASS_SOUTH = 12;
 // export const WATER_WITH_GRASS_EAST = 18;
@@ -46,11 +86,13 @@ export const WATER = 16;
 // things
 export const NOTHING = -1;
 export const BANANA = 0;
-export const GRAPES = 1;
-export const APPLES = 2;
-export const PLUM = 3;
-export const BLUEBERRY = 4;
-export const STRAWBERRY = 5;
+export const STRAWBERRY = 1;
+export const CORN = 2;
+export const APPLES = 3;
+export const GRAPES = 4;
+export const PLUM = 5;
+export const BLUEBERRY = 6;
+export const EGGPLANT = 7;
 
 // directions
 export const NORTH = 'north'

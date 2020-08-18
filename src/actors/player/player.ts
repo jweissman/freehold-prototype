@@ -11,16 +11,16 @@ export class Player extends Actor {
   worldPosition: WorldPosition = [0, 0] as WorldPosition //new Vector(0,0)
   moving?: Direction = null
   facing?: Direction = null
-  walkSpeed: number = 230
+  walkSpeed: number = 350
 
   constructor() {
     super({
       // pos: new ex.Vector(0,0),
-      width: OVERWORLD_CELL_SIZE * 2,
-      height: OVERWORLD_CELL_SIZE * 2,
+      width: OVERWORLD_CELL_SIZE, //* 2,
+      height: OVERWORLD_CELL_SIZE, // * 2,
       color: new ex.Color(255, 255, 255)
     });
-    this.anchor = new Vector(0.5,0.5)
+    this.anchor = new Vector(0.5,1) //0.5)
   }
 
   onInitialize(game: Game) {
@@ -51,10 +51,7 @@ export class Player extends Actor {
 
   private canMove(direction: Direction): boolean {
     let [x,y] = adjustPosition(this.worldPosition, direction)
-    if (this._game.world.isPositionClear(x,y+1)) {
-      return true
-    }
-    return false
+    return this._game.world.isPositionClear(x,y) //+1)
   }
 
   async move(direction: Direction) {
@@ -107,6 +104,7 @@ export class Player extends Actor {
 
   idle() {
     this.facing = SOUTH
+    // if (this._game.load)
     this.setDrawing(PEASANT_IDLE)
   }
 

@@ -14,19 +14,24 @@ export class Play extends ex.Scene {
   _game: Game
 
   public onInitialize(engine: Game) {
-    let terrainMapOrigin = [ 0,0]
+    let terrainSource = engine.world.prettyTerrain
+    let isOffset = true
+    let terrainMapOrigin = isOffset ? [ 0,0]
+                                    : [-OVERWORLD_CELL_SIZE / 2, -OVERWORLD_CELL_SIZE / 2 ]
     this.terrainTiles = new ex.TileMap(
       terrainMapOrigin[0],
       terrainMapOrigin[1],
       OVERWORLD_CELL_SIZE,
       OVERWORLD_CELL_SIZE,
-      engine.world.height,
-      engine.world.width
+      engine.world.height - 1,
+      engine.world.width - 1
     )
     this.terrainTiles.registerSpriteSheet('land', SpriteSheets.Terrain)
     engine.world.terrain.eachPosition((x, y) => {
       let cell = this.terrainTiles.getCell(x, y);
-      cell.pushSprite(new ex.TileSprite('land', engine.world.prettyTerrain.at(x, y)))
+      if (cell) {
+        cell.pushSprite(new ex.TileSprite('land', terrainSource.at(x, y)))
+      }
     })
 
     let thingMapOrigin = [-OVERWORLD_CELL_SIZE / 2, -OVERWORLD_CELL_SIZE / 2 ]
@@ -35,17 +40,19 @@ export class Play extends ex.Scene {
       thingMapOrigin[1],
       OVERWORLD_CELL_SIZE,
       OVERWORLD_CELL_SIZE,
-      engine.world.height,
-      engine.world.width
+      engine.world.height - 1,
+      engine.world.width - 1
     )
     this.thingTiles.registerSpriteSheet('fruit', SpriteSheets.Fruit)
     engine.world.things.eachPosition((x, y) => {
       let cell = this.thingTiles.getCell(x, y);
+      if (cell) {
       let value = engine.world.things.at(x, y)
       if (value !== NOTHING) {
         let sprite = new ex.TileSprite('fruit', value)
         cell.pushSprite(sprite)
       }
+    }
     })
     this._game = engine
   }
@@ -84,7 +91,7 @@ export class Play extends ex.Scene {
         if (this.player.facing) {
           this.player.setFacing(this.player.facing)
         } else {
-          this.player.idle()
+          // this.player.idle()
         }
       }
     }
