@@ -10,9 +10,30 @@ export class Cartogram {
   constructor(public name: string, public dims: Dimensions, public cells: number[][] = []) {
   }
 
+  distributeRoughGrainedValues(valueDistribution: number[], grain: number = 16) {
+    this.eachPosition((x, y) => {
+      if (x % grain === 0 && y % grain === 0) {
+        let val = pick(...valueDistribution)
+        for (let dx = 0; dx < grain; dx++) {
+          for (let dy = 0; dy < grain; dy++) {
+            let targetX = x + dx
+            let targetY = y + dy
+            this.cells[targetY] = this.cells[targetY] || []
+            this.cells[targetY][targetX] = val
+          }
+        }
+      // } else {
+        // this.cells[y][x] = this.cells[Math.floor(y/grain)][Math.floor(x/grain)] //pick(...valueDistribution)
+      }
+      // let placeHere = hasPlacementRestrictions ? shouldPlace(x, y) : true
+      // if (placeHere) {
+      // }
+    }, (y) => this.cells[y] = this.cells[y] || [])
+  }
+
   distributeValues(valueDistribution: number[], shouldPlace?: (x: number, y: number) => boolean) {
     let hasPlacementRestrictions = !!shouldPlace
-    console.log("Build map", name, hasPlacementRestrictions)
+    console.log("Build map", this.name)
     this.eachPosition((x, y) => {
       let placeHere = hasPlacementRestrictions ? shouldPlace(x, y) : true
       if (placeHere) {
@@ -42,14 +63,14 @@ export class Cartogram {
     // throw new Error("Method not implemented.");
   }
 
-  smooth(rounds: number = 1) {
+  smooth(rounds: number = 3) {
     for (let i = 0; i < rounds; i++) {
       let newCells: number[][] = []
       this.eachPosition((x,y) => {
         let originalValue = this.at(x,y)
         let neighbors = this.neighbors(x,y)
         let modalValue = mode(originalValue, ...neighbors)
-        newCells[y][x] = modalValue
+        newCells[y][x] = pick(...times(13, modalValue), ...neighbors, originalValue)
       }, (y) => newCells[y] = [])
       this.cells = newCells;
     }
@@ -86,16 +107,16 @@ export class Cartogram {
       .map(([x, y]) => this.cells[y][x])
   }
 
-  labelledNeighbors(x: number, y: number) {
+  labelledNeighbors(x: number, y: number, defaultValue: number = 0) {
     return {
-      [NORTHWEST]: this.at(x - 1, y - 1),
-      [NORTH]: this.at(x, y - 1),
-      [NORTHEAST]: this.at(x + 1, y - 1),
-      [WEST]: this.at(x - 1, y),
-      [EAST]: this.at(x + 1, y),
-      [SOUTHWEST]: this.at(x - 1, y + 1),
-      [SOUTH]: this.at(x, y + 1),
-      [SOUTHEAST]: this.at(x + 1, y + 1)
+      [NORTHWEST]: this.at(x - 1, y - 1) || defaultValue,
+      [NORTH]: this.at(x, y - 1) || defaultValue,
+      [NORTHEAST]: this.at(x + 1, y - 1) || defaultValue,
+      [WEST]: this.at(x - 1, y) || defaultValue,
+      [EAST]: this.at(x + 1, y) || defaultValue,
+      [SOUTHWEST]: this.at(x - 1, y + 1) || defaultValue,
+      [SOUTH]: this.at(x, y + 1) || defaultValue,
+      [SOUTHEAST]: this.at(x + 1, y + 1) || defaultValue
     }
       // .filter(([x, y]) => this.withinBounds(x, y))
       // .map(([x, y]) => this.cells[y][x])

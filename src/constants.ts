@@ -17,25 +17,29 @@ export const PEASANT_FACE_UP =    'peasant/face_up'
 export const PEASANT_IDLE = 'peasant/idle'
 
 // terrain
-export const GRASS = 0;
-export const WATER = 1;
-export const MOUNTAIN = 2;
+export const GRASS = 15;
+export const WATER = 16;
+// export const MOUNTAIN = 2;
 
 // pretty terrain
-export const WATER_WITH_GRASS_NORTH = 9;
-export const WATER_WITH_GRASS_SOUTH = 12;
-export const WATER_WITH_GRASS_EAST = 18;
-export const WATER_WITH_GRASS_WEST = 16;
-export const WATER_WITH_GRASS_SOUTHEAST = 11;
-// export const WATER_WITH_GRASS_SOUTHWEST = 14;
-export const WATER_WITH_GRASS_NORTHEAST = 27;
-// export const WATER_WITH_GRASS_NORTHWEST = 30;
-// WATER_WITH_GRASS_NORTHEAST
+// export const WATER_WITH_GRASS_NORTH = 9;
+// export const WATER_WITH_GRASS_SOUTH = 12;
+// export const WATER_WITH_GRASS_EAST = 18;
+// export const WATER_WITH_GRASS_WEST = 16;
+// export const WATER_WITH_GRASS_SOUTHEAST = 11;
+// export const WATER_WITH_GRASS_SOUTHWEST = 13;
+// export const WATER_WITH_GRASS_NORTHEAST = 27;
+// export const WATER_WITH_GRASS_NORTHWEST = 29;
+// // WATER_WITH_GRASS_NORTHEAST
 
-export const GRASS_WITH_WATER_SOUTHEAST = 8;
-export const GRASS_WITH_WATER_SOUTHWEST = 10;
-export const GRASS_WITH_WATER_NORTHEAST = 24;
-export const GRASS_WITH_WATER_NORTHWEST = 26;
+// export const GRASS_WITH_WATER_SOUTHEAST = 8;
+// export const GRASS_WITH_WATER_SOUTHWEST = 10;
+// export const GRASS_WITH_WATER_NORTHEAST = 24;
+// export const GRASS_WITH_WATER_NORTHWEST = 26;
+
+// export const GRASS_WITH_WATER_SURROUNDING = 30;
+// export const GRASS_WITH_WATER_SURROUNDING_BRIDGE_SOUTH = 31;
+
 
 
 

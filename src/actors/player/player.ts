@@ -16,11 +16,11 @@ export class Player extends Actor {
   constructor() {
     super({
       // pos: new ex.Vector(0,0),
-      width: OVERWORLD_CELL_SIZE,
-      height: OVERWORLD_CELL_SIZE,
+      width: OVERWORLD_CELL_SIZE * 2,
+      height: OVERWORLD_CELL_SIZE * 2,
       color: new ex.Color(255, 255, 255)
     });
-    this.anchor = new Vector(0.5,0)
+    this.anchor = new Vector(0.5,0.5)
   }
 
   onInitialize(game: Game) {

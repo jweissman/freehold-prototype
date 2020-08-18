@@ -16,7 +16,7 @@ let sz = OVERWORLD_CELL_SIZE
 let SpriteSheets = {
   Fruit: new ex.SpriteSheet(Resources.Fruit, 3, 2, sz, sz),
   Terrain: new ex.SpriteSheet(Resources.Terrain, 8, 8, sz, sz),
-  Peasant: new ex.SpriteSheet(Resources.Peasant, 4, 4, sz, sz),
+  Peasant: new ex.SpriteSheet(Resources.Peasant, 4, 4, sz*2, sz*2),
 }
 
 export { Resources, SpriteSheets }
