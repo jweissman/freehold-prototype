@@ -13,7 +13,7 @@ export class Play extends ex.Scene {
   _game: Game
 
   public onInitialize(engine: Game) {
-    let mapOrigin = [ -OVERWORLD_CELL_SIZE / 2, -OVERWORLD_CELL_SIZE / 2 ]
+    let mapOrigin = [ 0,0] //-OVERWORLD_CELL_SIZE / 2, -OVERWORLD_CELL_SIZE / 2 ]
     this.tiles = new ex.TileMap(
       mapOrigin[0],
       mapOrigin[1],

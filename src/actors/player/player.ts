@@ -11,7 +11,7 @@ export class Player extends Actor {
   worldPosition: WorldPosition = [0, 0] as WorldPosition //new Vector(0,0)
   moving?: Direction = null
   facing?: Direction = null
-  walkSpeed: number = 130
+  walkSpeed: number = 230
 
   constructor() {
     super({

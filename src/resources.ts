@@ -2,7 +2,8 @@ import * as ex from 'excalibur';
 import { OVERWORLD_CELL_SIZE } from './constants';
 const sword = require('./images/sword.png');
 const fruit = require('./images/fruit.png');
-const terrain = require('./images/terrain.png');
+const terrain = require('./images/terrain-deep.png');
+// const terrainSmooth = require('./images/terrain.png');
 const peasant = require('./images/peasant.png');
 
 let Resources = {
