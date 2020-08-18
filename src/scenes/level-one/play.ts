@@ -7,38 +7,51 @@ import { Vector, Input, LockCameraToActorStrategy } from 'excalibur';
 import { NOTHING, NORTH, WEST, SOUTH, EAST, OVERWORLD_CELL_SIZE } from '../../constants';
 
 export class Play extends ex.Scene {
-  tiles: ex.TileMap
+  terrainTiles: ex.TileMap
+  thingTiles: ex.TileMap
   cursor: Cursor
   player: Player
   _game: Game
 
   public onInitialize(engine: Game) {
-    let mapOrigin = [ 0,0] //-OVERWORLD_CELL_SIZE / 2, -OVERWORLD_CELL_SIZE / 2 ]
-    this.tiles = new ex.TileMap(
-      mapOrigin[0],
-      mapOrigin[1],
+    let terrainMapOrigin = [ 0,0]
+    this.terrainTiles = new ex.TileMap(
+      terrainMapOrigin[0],
+      terrainMapOrigin[1],
       OVERWORLD_CELL_SIZE,
       OVERWORLD_CELL_SIZE,
       engine.world.height,
       engine.world.width
     )
-    this.tiles.registerSpriteSheet('land', SpriteSheets.Terrain)
-    this.tiles.registerSpriteSheet('fruit', SpriteSheets.Fruit)
+    this.terrainTiles.registerSpriteSheet('land', SpriteSheets.Terrain)
     engine.world.terrain.eachPosition((x, y) => {
-      let cell = this.tiles.getCell(x, y);
+      let cell = this.terrainTiles.getCell(x, y);
       cell.pushSprite(new ex.TileSprite('land', engine.world.prettyTerrain.at(x, y)))
     })
+
+    let thingMapOrigin = [-OVERWORLD_CELL_SIZE / 2, -OVERWORLD_CELL_SIZE / 2 ]
+    this.thingTiles = new ex.TileMap(
+      thingMapOrigin[0],
+      thingMapOrigin[1],
+      OVERWORLD_CELL_SIZE,
+      OVERWORLD_CELL_SIZE,
+      engine.world.height,
+      engine.world.width
+    )
+    this.thingTiles.registerSpriteSheet('fruit', SpriteSheets.Fruit)
     engine.world.things.eachPosition((x, y) => {
-      let cell = this.tiles.getCell(x, y);
+      let cell = this.thingTiles.getCell(x, y);
       let value = engine.world.things.at(x, y)
       if (value !== NOTHING) {
-        cell.pushSprite(new ex.TileSprite('fruit', value))
+        let sprite = new ex.TileSprite('fruit', value)
+        cell.pushSprite(sprite)
       }
     })
     this._game = engine
   }
   public onActivate() {
-    this.add(this.tiles)
+    this.add(this.terrainTiles)
+    this.add(this.thingTiles)
     this.cursor = new Cursor();
     this.player = new Player();
     this.add(this.player);
@@ -78,6 +91,6 @@ export class Play extends ex.Scene {
   }
 
   public onDeactivate() {
-    this.remove(this.tiles)
+    this.remove(this.terrainTiles)
   }
 }
