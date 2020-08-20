@@ -18,7 +18,7 @@ export class World {
 
     // distribute things
     let thingDistribution = [
-      ...times(300, NOTHING),
+      ...times(100, NOTHING),
       ...times(1, BANANA),
       ...times(2, GRAPES),
       ...times(3, APPLES),
@@ -92,7 +92,7 @@ export class World {
     // this.terrain.distributeValues(terrainDistribution)
     this.terrain.distributeRoughGrainedValues(terrainDistribution, 8)
     this.terrain.smooth(8)
-    this.terrain.distributeWithin(GRASS, TREES, 21, 8)
+    this.terrain.distributeWithin(GRASS, TREES, 21, 15)
   }
 
   prettifyInterface(indices: number[][], terrainOne: number, terrainTwo: number) {

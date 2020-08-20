@@ -25,7 +25,7 @@ export const TREES = 3;
 // pretty terrain
           // [self] [east] [south] [southeast]
 export const WATER_GRASS_INTERFACE = [
-      [1,2,17],  // 0000 -- all water
+      [17],  // 0000 -- all water
       [11], // 0001 -- grass at bottom-right corner
       [13], // 0010 -- grass at bottom-left corner
       [25], // 0011 -- grass on bottom side
@@ -40,7 +40,7 @@ export const WATER_GRASS_INTERFACE = [
       [28], // 1100 -- grass on top side
       [10], // 1101 -- water at bottom-left corner
       [8], // 1110 -- water at bottom-right corner
-      [0,20] // 1111 -- all grass
+      [0] // 1111 -- all grass
     ];
 
       // [self] [east] [south] [southeast]
@@ -60,7 +60,7 @@ export const TREE_GRASS_INTERFACE: number[][] = [
       [52], // 1100 -- grass on top side
       [34], // 1101 -- tree at bottom-left corner
       [32], // 1110 -- tree at bottom-right corner
-      [0,20] // 1111 -- all grass
+      [0] // 1111 -- all grass
     ]
 // export const WATER_WITH_GRASS_NORTH = 9;
 // export const WATER_WITH_GRASS_SOUTH = 12;

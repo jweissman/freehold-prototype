@@ -104,7 +104,7 @@ export class Play extends ex.Scene {
       // need to keep holding E or it goes away
       if (this._game.input.keyboard.isHeld(Input.Keys.E)) {
         console.log("interact -- continue", this.interaction.percent)
-        this.interaction.percent += 0.8
+        this.interaction.percent += 0.9
         if (this.interaction.percent >= 100) {
           console.log("interact complete")
           // this.world.terrain
