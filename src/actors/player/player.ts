@@ -2,22 +2,21 @@ import * as ex from 'excalibur';
 import { SpriteSheets } from '../../resources';
 import { PEASANT_WALK_RIGHT, PEASANT_WALK_DOWN, PEASANT_WALK_LEFT, PEASANT_WALK_UP, PEASANT_IDLE, NORTH, WEST, SOUTH, EAST, PEASANT_FACE_LEFT, PEASANT_FACE_RIGHT, PEASANT_FACE_DOWN, PEASANT_FACE_UP, OVERWORLD_CELL_SIZE } from '../../constants';
 import { Engine, Actor, Vector } from 'excalibur';
-import { Game } from '../..';
 import { Direction, adjustPosition } from '../../models/direction';
 import { WorldPosition } from '../../models/position';
+import { Game } from '../../Game';
 
 export class Player extends Actor {
   _game: Game
-  worldPosition: WorldPosition = [0, 0] as WorldPosition //new Vector(0,0)
+  worldPosition: WorldPosition = [0, 0] as WorldPosition
   moving?: Direction = null
   facing?: Direction = null
   walkSpeed: number = 350
 
   constructor() {
     super({
-      // pos: new ex.Vector(0,0),
-      width: OVERWORLD_CELL_SIZE, //* 2,
-      height: OVERWORLD_CELL_SIZE, // * 2,
+      width: OVERWORLD_CELL_SIZE,
+      height: OVERWORLD_CELL_SIZE,
       color: new ex.Color(255, 255, 255)
     });
     this.anchor = new Vector(0.5,1) //0.5)
@@ -51,7 +50,7 @@ export class Player extends Actor {
 
   private canMove(direction: Direction): boolean {
     let [x,y] = adjustPosition(this.worldPosition, direction)
-    return this._game.world.isPositionClear(x,y) //+1)
+    return this._game.world.isPositionClear(x,y)
   }
 
   async move(direction: Direction) {

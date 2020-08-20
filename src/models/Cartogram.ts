@@ -43,7 +43,7 @@ export class Cartogram {
     }, (y) => this.cells[y] = [])
   }
 
-  distributeWithin(source: number, value: number, rate: number) {
+  distributeWithin(source: number, value: number, sourceRate: number, valueRate: number) {
     let places = []
     // throw new Error("Method not implemented.");
 
@@ -57,8 +57,9 @@ export class Cartogram {
       }
     })
 
+    let distribution = [...times(valueRate, value), ...times(sourceRate, source)]
     places.forEach(([x,y]) => {
-      this.set(x,y, pick(value, ...times(rate,source)))
+      this.set(x,y, pick(...distribution))
 
     })
   }

@@ -4,7 +4,7 @@ import { Cartogram } from "./Cartogram";
 import { pick } from "../util/rand";
 import { times } from "../util/times";
 import { WorldPosition } from "./position";
-import { GRASS, WATER, NORTH, EAST, SOUTH, WEST, NOTHING, BANANA, GRAPES, APPLES, PLUM, BLUEBERRY, SOUTHEAST, TREES, WATER_GRASS_INTERFACE, TREE_GRASS_INTERFACE, CORN } from "../constants";
+import { GRASS, WATER, NORTH, EAST, SOUTH, WEST, NOTHING, BANANA, GRAPES, APPLES, PLUM, BLUEBERRY, SOUTHEAST, TREES, WATER_GRASS_INTERFACE, TREE_GRASS_INTERFACE, CORN, STRAWBERRY } from "../constants";
 
 export class World {
   terrain: Cartogram
@@ -18,18 +18,22 @@ export class World {
 
     // distribute things
     let thingDistribution = [
-      ...times(1000, NOTHING),
+      ...times(300, NOTHING),
       ...times(1, BANANA),
       ...times(2, GRAPES),
       ...times(3, APPLES),
       ...times(1, PLUM),
       ...times(1, BLUEBERRY),
       ...times(10, CORN),
+      ...times(10, STRAWBERRY),
     ]
     this.things = new Cartogram('things', dims)
     this.things.distributeValues(
       thingDistribution,
-      (x,y) => this.terrain.at(x,y) == GRASS
+      (x,y) => 
+      this.terrain.at(x,y) == GRASS &&
+        this.terrain.neighbors(x,y).every(cell => cell == GRASS)
+      
     )
   }
 
@@ -37,9 +41,46 @@ export class World {
   get height() { return this.terrain.dims.height }
 
   static gen(): World {
-    let world = new World({ width: 64, height: 64 })
+    let world = new World({ width: 256, height: 256 })
     return world
   }
+
+  describeTerrain(x: number, y: number): string {
+    let terrain = this.terrain.at(x,y)
+    if (terrain == GRASS) {
+      return 'grass'
+    } else if (terrain == WATER) {
+      return 'water'
+    } else if (terrain == TREES) {
+      return 'forest'
+    } else {
+      return '???'
+    }
+  }
+
+  describeObject(x: number, y: number) {
+    let it = this.things.at(x,y)
+    if (it == NOTHING || it == undefined) { return '' }
+    else if (it == BANANA) { return 'banana' }
+    else if (it == GRAPES) { return 'grapes' }
+    else if (it == BLUEBERRY) { return 'blueberry' }
+    else if (it == CORN) { return 'corn' }
+    else if (it == STRAWBERRY) { return 'strawberry'}
+    else if (it == APPLES) { return 'apples' }
+    else if (it == PLUM) { return 'plum' }
+    else { return '??? [' + it + ']'}
+
+    // throw new Error("Method not implemented.");
+  }
+
+  chopTreeAt(x: number, y: number) {
+    console.log("chop tree at target: " + x + ", " + y)
+    this.terrain.set(x,y,GRASS)
+    this.assemblePrettyTerrain()
+    // throw new Error("Method not implemented.");
+  }
+
+  
 
   generateRawTerrain(dims: Dimensions) {
     let terrainDistribution = [
@@ -49,9 +90,9 @@ export class World {
     ]
     this.terrain = new Cartogram('terrain', dims)
     // this.terrain.distributeValues(terrainDistribution)
-    this.terrain.distributeRoughGrainedValues(terrainDistribution, 16)
+    this.terrain.distributeRoughGrainedValues(terrainDistribution, 8)
     this.terrain.smooth(8)
-    this.terrain.distributeWithin(GRASS, TREES, 7)
+    this.terrain.distributeWithin(GRASS, TREES, 21, 8)
   }
 
   prettifyInterface(indices: number[][], terrainOne: number, terrainTwo: number) {
