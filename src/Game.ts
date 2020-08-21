@@ -1,9 +1,8 @@
-import * as ex from 'excalibur';
 import { World } from './models/world';
 import { Hud } from './ui/Hud';
+import { Engine, DisplayMode } from 'excalibur';
 
-
-export class Game extends ex.Engine {
+export class Game extends Engine {
   world: World;
   hud: Hud;
 
@@ -11,7 +10,7 @@ export class Game extends ex.Engine {
     super({
       width: 800,
       height: 600,
-      displayMode: ex.DisplayMode.FullScreen,
+      displayMode: DisplayMode.FullScreen,
       canvasElementId: 'game',
     });
     this.world = World.gen();

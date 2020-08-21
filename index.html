@@ -15,6 +15,12 @@
         top: 0;
         left: 0;
         font-family: "Helvetica Neue", Arial, sans-serif;
+        /* color: white; */
+      }
+
+      table {
+        background-color: rgba(0,0,0,0.3);
+        color: white;
       }
     </style>
   </head>
@@ -27,14 +33,14 @@
       <!-- The UI will automatically be drawn above the game due to z-indexing -->
       <div id="ui">
         <!-- This is where your game UI will go, dynamically created per scene -->
-        <table style="border: 1px solid black">
+        <table style="border: 1px solid white">
           <tr>
             <td><b>FREEHOLD</b></td>
             <td>v0.0.1-prealpha</td>
           </tr>
           <tr>
-            <td>welcome</td>
-            <td id="hover-note" style="background-color: rgba(255,255,255,0.2)">hover: nothing</td>
+            <td>hover</td>
+            <td id="hover-note" style="background-color: rgba(255,255,255,0.2)">--</td>
           </tr>
         </table>
       </div>

@@ -9,7 +9,7 @@ export class Hud {
   setHoverMessage(message: string) {
     // console.log("set hover message", message)
     if (this.hover) {
-      this.hover.innerHTML = `hover: ${message}`
+      this.hover.innerHTML = message
     }
   }
 

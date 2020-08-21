@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import { SpriteSheets } from '../../resources';
-import { PEASANT_WALK_RIGHT, PEASANT_WALK_DOWN, PEASANT_WALK_LEFT, PEASANT_WALK_UP, PEASANT_IDLE, NORTH, WEST, SOUTH, EAST, PEASANT_FACE_LEFT, PEASANT_FACE_RIGHT, PEASANT_FACE_DOWN, PEASANT_FACE_UP, OVERWORLD_CELL_SIZE } from '../../constants';
+import { PEASANT_WALK_RIGHT, PEASANT_WALK_DOWN, PEASANT_WALK_LEFT, PEASANT_WALK_UP, PEASANT_IDLE, NORTH, WEST, SOUTH, EAST, PEASANT_FACE_LEFT, PEASANT_FACE_RIGHT, PEASANT_FACE_DOWN, PEASANT_FACE_UP, OVERWORLD_CELL_SIZE, WATER } from '../../constants';
 import { Engine, Actor, Vector } from 'excalibur';
 import { Direction, adjustPosition } from '../../models/direction';
 import { WorldPosition } from '../../models/position';
@@ -81,9 +81,17 @@ export class Player extends Actor {
     [SOUTH]: PEASANT_FACE_DOWN,
   }
 
+  // swimFacingAnims = {
+  // }
+
   setFacing(direction: Direction) {
     this.facing = direction;
-    this.setDrawing(this.facingAnims[direction])
+    let [x,y] = this.worldPosition
+    if (this._game.world.terrain.at(x,y) == WATER) {
+      this.setDrawing(this.facingAnims[direction])
+    } else {
+      this.setDrawing(this.facingAnims[direction])
+    }
   }
 
   setMoving(direction: Direction) {
@@ -105,6 +113,11 @@ export class Player extends Actor {
     this.facing = SOUTH
     // if (this._game.load)
     this.setDrawing(PEASANT_IDLE)
+  }
+
+  get swimming() {
+    let [x,y] = this.worldPosition
+    return this._game.world.terrain.at(x,y) == WATER;
   }
 
 }

@@ -20,7 +20,7 @@ let SpriteSheets = {
   Fruit: new ex.SpriteSheet(Resources.Fruit, 7, 2, sz, sz),
   Terrain: new ex.SpriteSheet(Resources.Terrain, 8, 8, sz, sz),
   Peasant: new ex.SpriteSheet(Resources.Peasant, 4, 4, sz, sz),
-  Progress: new ex.SpriteSheet(Resources.Progress, 34, 1, sz, sz),
+  Progress: new ex.SpriteSheet(Resources.Progress, 17, 1, sz, sz),
 }
 
 export { Resources, SpriteSheets }

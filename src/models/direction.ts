@@ -16,5 +16,7 @@ export function adjustPosition(position: WorldPosition, direction: Direction): W
     return [x, y+1] as WorldPosition
   } else if (direction === EAST) {
     return [x+1, y] as WorldPosition
+  } else {
+    throw new Error("Invalid direction to adjustPosition: " + direction)
   }
 }
