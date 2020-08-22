@@ -17,7 +17,7 @@ export class ProgressBar extends Actor {
   onInitialize(engine: Game) {
     this.addDrawing('progress', SpriteSheets.Progress.getAnimationForAll(
       engine,
-      (PROGRESS_INTERVAL / PROGRESS_ANIM_LENGTH) + 15 // milliseconds per frame...
+      (PROGRESS_INTERVAL / PROGRESS_ANIM_LENGTH) + 10 // milliseconds per frame...
     ))
     this.setDrawing('progress')
     // this.visible = false

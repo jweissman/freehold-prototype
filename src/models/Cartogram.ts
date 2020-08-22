@@ -9,6 +9,7 @@ export class Cartogram {
   
   // private cells: number[][] = [];
   constructor(public name: string, public dims: Dimensions, public cells: number[][] = []) {
+    this.eachPosition((x, y) => this.set(x,y,-1))
   }
 
   distributeRoughGrainedValues(valueDistribution: number[], grain: number = 16) {
@@ -81,6 +82,7 @@ export class Cartogram {
   at(x: number, y: number) { return this.cells[y] && this.cells[y][x] }
 
   set(x: number, y: number, value: number) {
+    this.cells[y] = this.cells[y] || []
     this.cells[y][x] = value
     // throw new Error("Method not implemented.");
   }

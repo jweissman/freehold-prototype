@@ -4,28 +4,31 @@ import { Cartogram } from "./Cartogram";
 import { pick } from "../util/rand";
 import { times } from "../util/times";
 import { WorldPosition } from "./position";
-import { GRASS, WATER, NORTH, EAST, SOUTH, WEST, NOTHING, BANANA, GRAPES, APPLES, PLUM, BLUEBERRY, SOUTHEAST, TREES, WATER_GRASS_INTERFACE, TREE_GRASS_INTERFACE, CORN, STRAWBERRY } from "../constants";
+import { GRASS, WATER, NORTH, EAST, SOUTH, WEST, NOTHING, BANANA, GRAPES, APPLES, PLUM, BLUEBERRY, SOUTHEAST, TREES, WATER_GRASS_INTERFACE, TREE_GRASS_INTERFACE, CORN, STRAWBERRY, WOODEN_WALL, WOODEN_WALL_CONNECTIONS } from "../constants";
 
 export class World {
   terrain: Cartogram
   things: Cartogram
+  structure: Cartogram
+
   prettyTerrain: Cartogram
+  prettyStructure: Cartogram
 
   constructor(dims: Dimensions) {
     this.generateRawTerrain(dims)
-    this.prettyTerrain = this.terrain.copy('prettyTerrain')
+    this.prettyTerrain = new Cartogram('prettyTerrain', dims) //this.terrain.copy('prettyTerrain')
     this.assemblePrettyTerrain()
 
     // distribute things
     let thingDistribution = [
-      ...times(100, NOTHING),
+      ...times(10, NOTHING),
       ...times(1, BANANA),
       ...times(2, GRAPES),
       ...times(3, APPLES),
       ...times(1, PLUM),
       ...times(1, BLUEBERRY),
-      ...times(10, CORN),
-      ...times(10, STRAWBERRY),
+      ...times(2, CORN),
+      ...times(3, STRAWBERRY),
     ]
     this.things = new Cartogram('things', dims)
     this.things.distributeValues(
@@ -33,8 +36,10 @@ export class World {
       (x,y) => 
       this.terrain.at(x,y) == GRASS &&
         this.terrain.neighbors(x,y).every(cell => cell == GRASS)
-      
     )
+
+    this.structure = new Cartogram('structure', dims)
+    this.prettyStructure = new Cartogram('prettyStructure', dims)
   }
 
   get width() { return this.terrain.dims.width }
@@ -76,10 +81,19 @@ export class World {
   chopTreeAt(x: number, y: number) {
     console.log("chop tree at target: " + x + ", " + y)
     this.terrain.set(x,y,GRASS)
-    this.assemblePrettyTerrain()
+    // this.assemblePrettyTerrain()
+    this.beautifyTerrainInterfaces(TREE_GRASS_INTERFACE, TREES, GRASS)
     // throw new Error("Method not implemented.");
   }
 
+  buildWoodenWall(x: number, y: number) {
+    console.log("build wall at " + x + ", " + y)
+    this.structure.set(x,y,WOODEN_WALL)
+    this.beautifyStructureInterfaces(WOODEN_WALL_CONNECTIONS, WOODEN_WALL)
+    // this.prettify
+    // this.assemblePrett
+    // this.structure
+  }
   
 
   generateRawTerrain(dims: Dimensions) {
@@ -95,7 +109,7 @@ export class World {
     this.terrain.distributeWithin(GRASS, TREES, 21, 15)
   }
 
-  prettifyInterface(indices: number[][], terrainOne: number, terrainTwo: number) {
+  beautifyTerrainInterfaces(indices: number[][], terrainOne: number, terrainTwo: number) {
     this.prettyTerrain.eachPosition((x, y) => {
       let self = this.terrain.at(x, y)
       let neighbors = this.terrain.labelledNeighbors(x, y)
@@ -105,53 +119,52 @@ export class World {
       let group = [self, east, south, southeast]
 
       if (group.every(val => val == terrainOne || val == terrainTwo)) {
-        // let neighbors = this.terrain.labelledNeighbors(x, y) //, WATER)
         let mask =
           (this.terrain.at(x, y) == terrainOne ? 0 : 1) * 8 +
           (neighbors[EAST] == terrainOne ? 0 : 1) * 4 +
           (neighbors[SOUTH] == terrainOne ? 0 : 1) * 2 +
           (neighbors[SOUTHEAST] == terrainOne ? 0 : 1) * 1
         this.prettyTerrain.set(x, y, pick(...indices[mask]))
-        // }
       }
     })
   }
 
   assemblePrettyTerrain() {
-    // assemble pretty terrain
-    // this.prettyTerrain = this.terrain.copy('prettyTerrain')
-
-    // grass-water interface
-    // let prettyIndices = WATER_GRASS_INTERFACE 
-    this.prettifyInterface(WATER_GRASS_INTERFACE, WATER, GRASS)
-    this.prettifyInterface(TREE_GRASS_INTERFACE, TREES, GRASS)
-    // this.prettyTerrain.eachPosition((x, y) => {
-    //   let self = this.terrain.at(x,y)
-    //   let neighbors = this.terrain.labelledNeighbors(x, y)
-    //   let east = neighbors[EAST]
-    //   let south = neighbors[SOUTH]
-    //   let southeast = neighbors[SOUTHEAST]
-    //   let group = [self, east, south, southeast]
-    //   if (group.every(val => val == WATER || val == GRASS)) {
-    //     // let neighbors = this.terrain.labelledNeighbors(x, y) //, WATER)
-    //     let mask =
-    //       (this.terrain.at(x, y) == WATER ? 0 : 1) * 8 +
-    //       (neighbors[EAST] == WATER ? 0 : 1) * 4 +
-    //       (neighbors[SOUTH] == WATER ? 0 : 1) * 2 +
-    //       (neighbors[SOUTHEAST] == WATER ? 0 : 1) * 1
-    //     this.prettyTerrain.set(x, y, pick(...prettyIndices[mask]))
-    //   // }
-    //   }
-    // })
+    this.beautifyTerrainInterfaces(WATER_GRASS_INTERFACE, WATER, GRASS)
+    this.beautifyTerrainInterfaces(TREE_GRASS_INTERFACE, TREES, GRASS)
   }
+
+  beautifyStructureInterfaces(indices: number[], structure: number) {
+    this.prettyStructure.eachPosition((x,y) => {
+      let self = this.structure.at(x,y)
+      if (self == structure) {
+        // console.log("beautify structure " + structure + " at " + x + ", " + y)
+        let neighbors = this.structure.labelledNeighbors(x,y)
+        let north = neighbors[NORTH]
+        let south = neighbors[SOUTH]
+        let east = neighbors[EAST]
+        let west = neighbors[WEST]
+
+        let mask = (north == structure ? 1 : 0) * 8 +
+                   (east == structure ? 1 : 0) * 4 +
+                   (south == structure ? 1 : 0) * 2 +
+                   (west == structure ? 1 : 0) * 1
+        console.log("connections", { north, south, east, west}, "--->", mask)
+        this.prettyStructure.set(x,y,indices[mask])
+      }
+    })
+  }
+
 
   // 
   isPositionClear(x: number, y: number): boolean {
     let terrain = this.terrain.at(x,y)
     let thing = this.things.at(x, y)
+    let building = this.structure.at(x,y)
     let isClear = (terrain == GRASS) // || terrain == TREES)
         && (thing == NOTHING || thing == undefined)
-    // console.log("---> is position (" + x + "," + y + ") clear?", isClear, terrain, thing)
+        && (building == NOTHING || building == undefined)
+
     return isClear
   }
 

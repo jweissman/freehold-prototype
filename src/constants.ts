@@ -47,26 +47,26 @@ export const WATER_GRASS_INTERFACE = [
 
       // [self] [east] [south] [southeast]
 export const TREE_GRASS_INTERFACE: number[][] = [
-      [41],  // 0000 -- all tree
-      [35], // 0001 -- grass at bottom-right corner
-      [37], // 0010 -- grass at bottom-left corner
-      [36], // 0011 -- grass on bottom side
-      [51], // 0100 -- grass at top-right corner
-      [43], // 0101 -- grass on right side
-      [38], // 0110 -- grass w/ gap bottom-left to top-right
-      [50],  // 0111 -- tree at top-left corner
-      [53], // 1000 -- grass at top-left
-      [39], // 1001 -- grass w/ gap top-left to bottom-right
-      [45], // 1010 -- grass on left side
-      [48], // 1011 -- tree at top-right corner
-      [52], // 1100 -- grass on top side
-      [34], // 1101 -- tree at bottom-left corner
-      [32], // 1110 -- tree at bottom-right corner
+      [41],     // 0000 -- all tree
+      [35],     // 0001 -- grass at bottom-right corner
+      [37],     // 0010 -- grass at bottom-left corner
+      [36],     // 0011 -- grass on bottom side
+      [51],     // 0100 -- grass at top-right corner
+      [43],     // 0101 -- grass on right side
+      [38],     // 0110 -- grass w/ gap bottom-left to top-right
+      [50],     // 0111 -- tree at top-left corner
+      [53],     // 1000 -- grass at top-left
+      [39],     // 1001 -- grass w/ gap top-left to bottom-right
+      [45],     // 1010 -- grass on left side
+      [48],     // 1011 -- tree at top-right corner
+      [52],     // 1100 -- grass on top side
+      [34],     // 1101 -- tree at bottom-left corner
+      [32],     // 1110 -- tree at bottom-right corner
       ALL_GRASS // 1111 -- all grass
     ]
 
 
-// things (fruit)
+// things (fruit for now..)
 export const NOTHING = -1;
 export const BANANA = 0;
 export const STRAWBERRY = 1;
@@ -77,12 +77,35 @@ export const PLUM = 5;
 export const BLUEBERRY = 6;
 export const EGGPLANT = 7;
 
-// items
+// items / constructed objects
 export const WELL = 0;
 export const FIRE = 1;
 
+// structures
+export const WOODEN_WALL = 1;
+
+export const WOODEN_WALL_CONNECTIONS = [
+  // north east south west
+  5,  // 0000 -- no connections 
+  5,  // 0001 -- connected west
+  10,  // 0010 -- connected south
+  15, // 0011 -- connected south and west
+  5,  // 0100 -- connected east
+  5,  // 0101 -- connected east and west
+  11, // 0110 -- connected east and south
+  9,  // 0111 -- connected east-west and south
+  14, // 1000 -- connected north
+  3,  // 1001 -- connected north and west
+  10, // 1010 -- connected north and south
+  12, // 1011 -- connected north, south and west
+  7,  // 1100 -- connected north and east
+  6,  // 1101 -- connected east-west and north
+  13, // 1110 -- connected north-south and east
+  8,  // 1111 -- all connected
+]
+
 // duration of interaction progress (millis)
-export const PROGRESS_INTERVAL = 1000
+export const PROGRESS_INTERVAL = 500
 // # of cells in progress anim
 export const PROGRESS_ANIM_LENGTH = 24
 

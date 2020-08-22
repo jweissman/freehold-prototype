@@ -1,4 +1,3 @@
-// const hover = document.getElementById('hover')
 export class Hud {
   hover: Element
 
@@ -7,11 +6,8 @@ export class Hud {
   }
 
   setHoverMessage(message: string) {
-    // console.log("set hover message", message)
     if (this.hover) {
       this.hover.innerHTML = message
     }
   }
-
-  // get hover() { return document.getElementById('hover-note') }
 }
