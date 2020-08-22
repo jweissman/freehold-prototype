@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <style>
+      #root {
+        cursor: unset;
+        /* When this is relative, child elements positioned absolutely will
+           be relative to this element, not the document providing more accurate
+           positioning, since the canvas will be at (0, 0) */
+        position: relative;
+      }
+
+      #root #ui {
+        /* This will make the UI appear on top of the canvas */
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        /* color: white; */
+      }
+
+      table {
+        background-color: rgba(0,0,0,0.3);
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+        <!-- Define a wrapping element, in case you want to customize positions -->
+    <div id="root">
+      <!-- Provide your own canvas to Excalibur -->
+      <canvas id="game"></canvas>
+
+      <!-- The UI will automatically be drawn above the game due to z-indexing -->
+      <div id="ui">
+        <!-- This is where your game UI will go, dynamically created per scene -->
+        <table style="border: 1px solid white">
+          <tr>
+            <td><b>FREEHOLD</b></td>
+            <td>v0.0.1-prealpha</td>
+          </tr>
+          <tr>
+            <td>hover</td>
+            <td id="hover-note" style="background-color: rgba(255,255,255,0.2)">--</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  <script type="text/javascript" src="vendors~main.js"></script><script type="text/javascript" src="main.js"></script></body>
+</html>
