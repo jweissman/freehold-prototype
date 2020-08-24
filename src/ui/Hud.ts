@@ -20,4 +20,11 @@ export class Hud {
       this.lastToggledInspect = now
     }
   }
+
+  collect(item: string, count: number) {
+    let { inventory } = GameStateProvider.getGlobal()
+    inventory[item] = inventory[item] || 0
+    inventory[item] += count
+    GameStateProvider.setGlobal({ inventory})
+  }
 }

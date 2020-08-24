@@ -42,7 +42,8 @@ export class Cursor extends Actor {
 
     this.anchor = new Vector(0.5,0.5)
     // this.addDrawing(SpriteSheets.Structure.getSprite(5))
-    this.pluckedStructure = new PluckedStructure
+    this.pluckedStructure = new PluckedStructure()
+    this.pluckedStructure.visible = false
     this.add(this.pluckedStructure)
   }
 
@@ -67,7 +68,7 @@ export class Cursor extends Actor {
         let item = engine.world.describeObject(cellX, cellY)
         engine.hud.setHoverMessage([item, terrain].join(' -- '))
 
-        if (engine.world.terrain.at(cellX, cellY) == GRASS) {
+        if (engine.world.isPositionClear(cellX, cellY)) {
           this.color = Color.Black
         } else {
           this.color = Color.Red

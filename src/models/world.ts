@@ -74,8 +74,6 @@ export class World {
     else if (it == APPLES) { return 'apples' }
     else if (it == PLUM) { return 'plum' }
     else { return '??? [' + it + ']'}
-
-    // throw new Error("Method not implemented.");
   }
 
   chopTreeAt(x: number, y: number) {
@@ -162,7 +160,7 @@ export class World {
     let thing = this.things.at(x, y)
     let building = this.structure.at(x,y)
     let isClear = (terrain == GRASS) // || terrain == TREES)
-        && (thing == NOTHING || thing == undefined)
+        // && (thing == NOTHING || thing == undefined)
         && (building == NOTHING || building == undefined)
 
     return isClear

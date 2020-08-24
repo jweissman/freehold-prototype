@@ -2,7 +2,7 @@ import { Game } from '../../Game';
 import { Cursor } from '../../actors/cursor/cursor';
 import { Player } from '../../actors/player/player';
 import { Vector, Input, LockCameraToActorStrategy, Scene } from 'excalibur';
-import { NORTH, WEST, SOUTH, EAST, OVERWORLD_CELL_SIZE, TREES, SOUTHEAST, PROGRESS_INTERVAL, GRASS } from '../../constants';
+import { NORTH, WEST, SOUTH, EAST, OVERWORLD_CELL_SIZE, TREES, SOUTHEAST, PROGRESS_INTERVAL, GRASS, STRAWBERRY, NOTHING } from '../../constants';
 import { adjustPosition } from '../../models/direction';
 import { ProgressBar } from '../../actors/progress';
 import { WorldPosition } from '../../models/position';
@@ -51,7 +51,7 @@ export class Play extends Scene {
   public buildStructure() {
     console.log("would build structure...")
     let [x,y] = this.cursor.hoverWorldPos
-    if (this._game.world.terrain.at(x,y) == GRASS) {
+    if (this._game.world.isPositionClear(x,y)) { //terrain.at(x,y) == GRASS) {
       this._game.world.buildWoodenWall(x,y)
       this.environs.assembleStructures()
     }
@@ -75,6 +75,7 @@ export class Play extends Scene {
           // this.world.terrain
           let [x,y] = this.interaction.at
           this._game.world.chopTreeAt(x,y)
+          this._game.hud.collect('wood', 5)
           this.environs.paveTerrainNarrowly([
             [x,y],
             [x - 1, y - 1], [x, y - 1], [x + 1, y - 1],
@@ -94,13 +95,13 @@ export class Play extends Scene {
         if (this._game.input.keyboard.isHeld(Input.Keys.E)) {
           this.startInteraction()
         } else if (this._game.input.keyboard.isHeld(Input.Keys.W)) {
-          this.player.move(NORTH)
+          this.player.move(NORTH).then(() => this.collectItems())
         } else if (this._game.input.keyboard.isHeld(Input.Keys.A)) {
-          this.player.move(WEST)
+          this.player.move(WEST).then(() => this.collectItems())
         } else if (this._game.input.keyboard.isHeld(Input.Keys.S)) {
-          this.player.move(SOUTH)
+          this.player.move(SOUTH).then(() => this.collectItems())
         } else if (this._game.input.keyboard.isHeld(Input.Keys.D)) {
-          this.player.move(EAST)
+          this.player.move(EAST).then(() => this.collectItems())
         } else {
           if (this.player.facing) {
             this.player.setFacing(this.player.facing)
@@ -110,7 +111,21 @@ export class Play extends Scene {
           }
         }
       }
+    }
   }
+
+  collectItems() {
+    // add any items on this cell to the inventory
+    let [x,y] = this.player.worldPosition
+    let it = this._game.world.things.at(x,y)
+    if (it !== NOTHING && it !== undefined) { 
+      let itemName = this._game.world.describeObject(x, y)
+      console.log("collect " + itemName)
+      this._game.hud.collect(itemName, 1)
+      this._game.world.things.set(x,y,NOTHING)
+      this.environs.thingTiles.getCell(x,y).clearSprites()
+      // and actually remove from tiles?
+    }
   }
 
   startInteraction() {
