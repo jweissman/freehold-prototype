@@ -149,7 +149,7 @@ export class World {
                    (east == structure ? 1 : 0) * 4 +
                    (south == structure ? 1 : 0) * 2 +
                    (west == structure ? 1 : 0) * 1
-        console.log("connections", { north, south, east, west}, "--->", mask)
+        // console.log("connections", { north, south, east, west}, "--->", mask)
         this.prettyStructure.set(x,y,indices[mask])
       }
     })

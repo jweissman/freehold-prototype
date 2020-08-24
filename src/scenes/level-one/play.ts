@@ -7,6 +7,7 @@ import { adjustPosition } from '../../models/direction';
 import { ProgressBar } from '../../actors/progress';
 import { WorldPosition } from '../../models/position';
 import { Environs } from './Environs';
+import { GameStateProvider } from '../../GameStateProvider';
 
 type Interaction = { active: boolean, at?: WorldPosition, startedAt?: number }
 
@@ -57,6 +58,11 @@ export class Play extends Scene {
   }
 
   handlePlayerInput() {
+    if (this._game.input.keyboard.isHeld(Input.Keys.Q)) {
+      this._game.hud.toggleInspect()
+      // GameStateProvider.setGlobal({ inspect: !GameStateProvider.getGlobal().inspect })
+    }
+
     if (this.interaction.active) {
       // need to keep holding E or it goes away
       if (this._game.input.keyboard.isHeld(Input.Keys.E)) {

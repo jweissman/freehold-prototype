@@ -1,13 +1,23 @@
-export class Hud {
-  hover: Element
+import { setGlobal, getGlobal } from 'reactn'
+import { GameStateProvider } from '../GameStateProvider'
 
-  constructor() {
-    this.hover = document.getElementById('hover-note')
-  }
+// thin wrapper around game state provider setters..
+export class Hud {
+  constructor() {}
 
   setHoverMessage(message: string) {
-    if (this.hover) {
-      this.hover.innerHTML = message
+    if (message !== GameStateProvider.getGlobal().message) {
+      GameStateProvider.setGlobal({ message })
+    }
+  }
+
+  lastToggledInspect: number = -1
+  toggleInspect() { 
+    let now = new Date().getTime()
+    let elapsed = now - this.lastToggledInspect
+    if (elapsed >= 200) {
+      GameStateProvider.setGlobal({ inspect: !GameStateProvider.getGlobal().inspect })
+      this.lastToggledInspect = now
     }
   }
 }
