@@ -92,9 +92,9 @@ export class Environs {
       let cell = this.structureTiles.getCell(x, y);
       if (cell) {
         let val = this.game.world.structure.at(x, y)
+        cell.clearSprites()
         if (val !== NOTHING) {
           let sprite = new ex.TileSprite('structure', this.structureSource.at(x, y))
-          cell.clearSprites()
           cell.pushSprite(sprite)
         }
       }

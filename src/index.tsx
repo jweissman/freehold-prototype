@@ -13,7 +13,6 @@ ReactDOM.render(<GameStateProvider><App /></GameStateProvider>, document.getElem
 console.log("CREATE GAME...")
 const game = new Game();
 
-
 const overworld = new Play(game);
 game.add(OVERWORLD, overworld);
 

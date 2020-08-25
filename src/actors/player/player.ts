@@ -19,7 +19,7 @@ export class Player extends Actor {
       height: OVERWORLD_CELL_SIZE,
       color: new ex.Color(255, 255, 255)
     });
-    this.anchor = new Vector(0.5,1) //0.5)
+    this.anchor = new Vector(0.5,0.75) //0.5)
   }
 
   onInitialize(game: Game) {

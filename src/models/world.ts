@@ -4,7 +4,7 @@ import { Cartogram } from "./Cartogram";
 import { pick } from "../util/rand";
 import { times } from "../util/times";
 import { WorldPosition } from "./position";
-import { GRASS, WATER, NORTH, EAST, SOUTH, WEST, NOTHING, BANANA, GRAPES, APPLES, PLUM, BLUEBERRY, SOUTHEAST, TREES, WATER_GRASS_INTERFACE, TREE_GRASS_INTERFACE, CORN, STRAWBERRY, WOODEN_WALL, WOODEN_WALL_CONNECTIONS } from "../constants";
+import { GRASS, WATER, NORTH, EAST, SOUTH, WEST, NOTHING, BANANA, GRAPES, APPLES, PLUM, BLUEBERRY, SOUTHEAST, TREES, WATER_GRASS_INTERFACE, TREE_GRASS_INTERFACE, CORN, STRAWBERRY, WOODEN_WALL, WOODEN_WALL_CONNECTIONS, WOODEN_FLOOR, WOODEN_DOOR_CLOSED, WOODEN_DOOR_OPEN, WOODEN_DOOR_OPEN_CONNECTIONS, WOODEN_DOOR_CLOSED_CONNECTIONS } from "../constants";
 
 export class World {
   terrain: Cartogram
@@ -84,10 +84,40 @@ export class World {
     // throw new Error("Method not implemented.");
   }
 
-  buildWoodenWall(x: number, y: number) {
-    console.log("build wall at " + x + ", " + y)
-    this.structure.set(x,y,WOODEN_WALL)
-    this.beautifyStructureInterfaces(WOODEN_WALL_CONNECTIONS, WOODEN_WALL)
+  beautifyWoodenStructures() {
+    let woodIndex = {
+        [WOODEN_WALL]: WOODEN_WALL_CONNECTIONS,
+        [WOODEN_DOOR_OPEN]: WOODEN_DOOR_OPEN_CONNECTIONS,
+        [WOODEN_DOOR_CLOSED]: WOODEN_DOOR_CLOSED_CONNECTIONS,
+      }
+    let connectingWoodStructures = [ WOODEN_WALL, WOODEN_DOOR_OPEN, WOODEN_DOOR_CLOSED ]
+    this.beautifyStructureInterfaces(woodIndex, connectingWoodStructures)
+  }
+
+  structureDescriptions = {
+    [WOODEN_WALL]: 'Wooden Wall',
+    [WOODEN_DOOR_OPEN]: 'Wooden Door (Open)',
+    [WOODEN_DOOR_CLOSED]: 'Wooden Door (Closed)',
+    [WOODEN_FLOOR]: 'Wooden Floor'
+  }
+  build(x: number, y: number, structureId: number) {
+    console.log("build structure with id " + structureId)
+    console.log("build " + this.structureDescriptions[structureId] + " at " + x + ", " + y)
+    // this.structure.set(x,y,structureId)
+    
+    if (structureId == WOODEN_WALL) {
+      this.structure.set(x, y, WOODEN_WALL)
+      this.beautifyWoodenStructures()
+    } else if (structureId == WOODEN_DOOR_CLOSED) {
+      this.structure.set(x, y, WOODEN_DOOR_CLOSED)
+      // this.beautifyStructureInterfaces(woodIndex, connectingWoodStructures)
+      this.beautifyWoodenStructures()
+    } else if (structureId == WOODEN_FLOOR) {
+      // need to actually modify terrain...?
+      // or maybe a 'floor' level terrain to ensure layering
+      // this.terrain.set(x,y,)
+      console.warn('would build floor...')
+    }
     // this.prettify
     // this.assemblePrett
     // this.structure
@@ -132,10 +162,10 @@ export class World {
     this.beautifyTerrainInterfaces(TREE_GRASS_INTERFACE, TREES, GRASS)
   }
 
-  beautifyStructureInterfaces(indices: number[], structure: number) {
+  beautifyStructureInterfaces(indices: { [key: number]: number[] }, structures: number[]) {
     this.prettyStructure.eachPosition((x,y) => {
       let self = this.structure.at(x,y)
-      if (self == structure) {
+      if (structures.includes(self)) { //self == structure) {
         // console.log("beautify structure " + structure + " at " + x + ", " + y)
         let neighbors = this.structure.labelledNeighbors(x,y)
         let north = neighbors[NORTH]
@@ -143,12 +173,16 @@ export class World {
         let east = neighbors[EAST]
         let west = neighbors[WEST]
 
-        let mask = (north == structure ? 1 : 0) * 8 +
-                   (east == structure ? 1 : 0) * 4 +
-                   (south == structure ? 1 : 0) * 2 +
-                   (west == structure ? 1 : 0) * 1
+        let mask = (structures.includes(north) ? 1 : 0) * 8 +
+                   (structures.includes(east) ? 1 : 0) * 4 +
+                   (structures.includes(south) ? 1 : 0) * 2 +
+                   (structures.includes(west) ? 1 : 0) * 1
         // console.log("connections", { north, south, east, west}, "--->", mask)
-        this.prettyStructure.set(x,y,indices[mask])
+        this.prettyStructure.set(x,y,indices[self][mask])
+        if (indices[self][mask] === -1) {
+          console.log("remove structure at " + x + ", " + y)
+          this.structure.set(x,y,-1)
+        }
       }
     })
   }
@@ -161,7 +195,7 @@ export class World {
     let building = this.structure.at(x,y)
     let isClear = (terrain == GRASS) // || terrain == TREES)
         // && (thing == NOTHING || thing == undefined)
-        && (building == NOTHING || building == undefined)
+        && (building == NOTHING || building == undefined || building == WOODEN_DOOR_OPEN)
 
     return isClear
   }

@@ -83,6 +83,9 @@ export const FIRE = 1;
 
 // structures
 export const WOODEN_WALL = 1;
+export const WOODEN_DOOR_CLOSED = 2;
+export const WOODEN_DOOR_OPEN = 3;
+export const WOODEN_FLOOR = 4;
 
 export const WOODEN_WALL_CONNECTIONS = [
   // north east south west
@@ -103,6 +106,49 @@ export const WOODEN_WALL_CONNECTIONS = [
   13, // 1110 -- connected north-south and east
   8,  // 1111 -- all connected
 ]
+
+// const WOODEN_DOOR_CLOSED_NORTH_SOUTH = 20
+export const WOODEN_DOOR_CLOSED_CONNECTIONS = [
+  // north east south west
+  16,  // 0000 -- no connections 
+  16,  // 0001 -- connected west
+  20,  // 0010 -- connected south
+  -1, // 0011 -- connected south and west
+  16,  // 0100 -- connected east
+  16,  // 0101 -- connected east and west
+  -1, // 0110 -- connected east and south
+  -1,  // 0111 -- connected east-west and south
+  20, // 1000 -- connected north
+  -1,  // 1001 -- connected north and west
+  20, // 1010 -- connected north and south
+  -1, // 1011 -- connected north, south and west
+  -1,  // 1100 -- connected north and east
+  -1,  // 1101 -- connected east-west and north
+  -1, // 1110 -- connected north-south and east
+  -1,  // 1111 -- all connected
+]
+
+export const WOODEN_DOOR_OPEN_CONNECTIONS = [
+  // north east south west
+  17,  // 0000 -- no connections 
+  17,  // 0001 -- connected west
+  21,  // 0010 -- connected south
+  -1, // 0011 -- connected south and west
+  17,  // 0100 -- connected east
+  17,  // 0101 -- connected east and west
+  -1, // 0110 -- connected east and south
+  -1,  // 0111 -- connected east-west and south
+  21, // 1000 -- connected north
+  -1,  // 1001 -- connected north and west
+  21, // 1010 -- connected north and south
+  -1, // 1011 -- connected north, south and west
+  -1,  // 1100 -- connected north and east
+  -1,  // 1101 -- connected east-west and north
+  -1, // 1110 -- connected north-south and east
+  -1,  // 1111 -- all connected
+]
+
+
 
 // duration of interaction progress (millis)
 export const PROGRESS_INTERVAL = 500

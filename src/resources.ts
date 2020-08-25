@@ -23,7 +23,7 @@ let SpriteSheets = {
   Terrain: new ex.SpriteSheet(Resources.Terrain, 8, 8, sz, sz),
   Peasant: new ex.SpriteSheet(Resources.Peasant, 4, 4, sz, sz),
   Progress: new ex.SpriteSheet(Resources.Progress, 17, 1, sz, sz),
-  Structure: new ex.SpriteSheet(Resources.Structure, 4, 4, sz, sz)
+  Structure: new ex.SpriteSheet(Resources.Structure, 4, 8, sz, sz)
 }
 
 export { Resources, SpriteSheets }

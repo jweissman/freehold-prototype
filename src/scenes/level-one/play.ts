@@ -2,7 +2,7 @@ import { Game } from '../../Game';
 import { Cursor } from '../../actors/cursor/cursor';
 import { Player } from '../../actors/player/player';
 import { Vector, Input, LockCameraToActorStrategy, Scene } from 'excalibur';
-import { NORTH, WEST, SOUTH, EAST, OVERWORLD_CELL_SIZE, TREES, SOUTHEAST, PROGRESS_INTERVAL, GRASS, STRAWBERRY, NOTHING } from '../../constants';
+import { NORTH, WEST, SOUTH, EAST, OVERWORLD_CELL_SIZE, TREES, SOUTHEAST, PROGRESS_INTERVAL, GRASS, STRAWBERRY, NOTHING, WOODEN_WALL, WOODEN_FLOOR, WOODEN_DOOR_CLOSED, WOODEN_DOOR_OPEN } from '../../constants';
 import { adjustPosition } from '../../models/direction';
 import { ProgressBar } from '../../actors/progress';
 import { WorldPosition } from '../../models/position';
@@ -48,11 +48,18 @@ export class Play extends Scene {
     // if (this._game.input.pointers.primary.)
   }
 
+  constructionLegend = {
+    'Wood Wall': WOODEN_WALL,
+    'Wood Door': WOODEN_DOOR_CLOSED,
+    'Wood Floor': WOODEN_FLOOR,
+  }
   public buildStructure() {
     console.log("would build structure...")
+    let { constructing } = GameStateProvider.getGlobal()
     let [x,y] = this.cursor.hoverWorldPos
-    if (this._game.world.isPositionClear(x,y)) { //terrain.at(x,y) == GRASS) {
-      this._game.world.buildWoodenWall(x,y)
+    if (constructing && this._game.world.isPositionClear(x,y)) { //terrain.at(x,y) == GRASS) {
+      let structureId = this.constructionLegend[constructing]
+      this._game.world.build(x,y, structureId)
       this.environs.assembleStructures()
     }
   }
@@ -128,15 +135,31 @@ export class Play extends Scene {
     }
   }
 
+  lastInteracted: number = -1
+  interactionGate: number = 250
   startInteraction() {
-    // if (this.interaction.active) {
-    // } else {
-      // create progress wherever player is facing, if it is a forest
+    let now = new Date().getTime()
+    let elapsed = now - this.lastInteracted
+    if (elapsed >= this.interactionGate) {
       let target: [number, number] = adjustPosition(this.player.worldPosition, this.player.facing)
-      if (this._game.world.terrain.at(...target) == TREES) {
+      let [x,y] = target
+      if (this._game.world.terrain.at(x,y) == TREES) {
         this.startProgressBar(target)
+      } else if (this._game.world.structure.at(x,y) == WOODEN_DOOR_CLOSED) {
+        console.log('would open door')
+        this._game.world.structure.set(x,y, WOODEN_DOOR_OPEN)
+        this._game.world.beautifyWoodenStructures()
+        this.environs.assembleStructures()
+      } else if (this._game.world.structure.at(x,y) == WOODEN_DOOR_OPEN) {
+        console.log('would close door')
+        this._game.world.structure.set(x,y, WOODEN_DOOR_CLOSED)
+        this._game.world.beautifyWoodenStructures()
+        this.environs.assembleStructures()
+      } else {
+        console.warn('nothing to interact with!')
       }
-    // }
+      this.lastInteracted = now
+    }
   }
 
   startProgressBar(target: [number, number]) {

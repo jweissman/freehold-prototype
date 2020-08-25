@@ -1,24 +1,50 @@
 import React from 'reactn';
 import MouseTooltip from 'react-sticky-mouse-tooltip';
 import { GameStateProvider } from "../GameStateProvider";
+import './App.css';
+
+const Inventory = ({ items }) =>
+    <div className="inventory box">
+      <div className='box-title'>
+        INVENTORY
+      </div>
+      <div className='rule' />
+      <div style={{padding: '3px', width: '95%', display: 'flex', flexDirection: 'column'}}>
+        {Object.entries(items).map(([it,count]) =>
+          <div key={it} style={{display: 'flex'}}>
+            <span style={{ flex: 1}}>{it}</span>
+            <span style={{flex: 1, textAlign: 'right'}}>x{count}</span>
+          </div>
+        )}
+      </div>
+    </div>
 
 export const App = () => {
-  const [{message, inspect, inventory}]= GameStateProvider.useGlobal()
+  const [{message, inspect, inventory, constructing}]= GameStateProvider.useGlobal()
   return <div>
     <div className="box meta" style={{padding: '3px'}}>
       <span style={{fontWeight: 'bold'}}>freehold</span>
     </div>
 
-    <div className="inventory box">
-      <span style={{fontSize: '11px', fontWeight: 'bold', padding: '3px'}}>
-        INVENTORY
-      </span>
-      <div style={{width: '100%', height: '1px', backgroundColor: 'white', margin: '0 auto'}} />
-      <div style={{padding: '3px', width: '95%', display: 'flex', flexDirection: 'column'}}>
-        {Object.entries(inventory).map(([it,count]) =>
-          <div key={it} style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
+    <Inventory items={inventory} />
+
+    <div className="construction box">
+      <div className='box-title'>
+        CONSTRUCTION
+      </div>
+      <div className='rule' />
+      <div style={{ padding: '3px', width: '95%', display: 'flex', flexDirection: 'column' }}>
+        {Object.entries({ 'Wood Wall': '10 wood', 'Wood Floor': '20 wood', 'Wood Door': '5 wood' }).map(([it,reqs]) =>
+          <div key={it} style={{display: 'flex', backgroundColor: constructing === it ? 'gray' : 'rgba(0,0,0,0.3)'}}
+            onClick={(e) => {
+              GameStateProvider.setGlobal({ constructing: it })
+              e.preventDefault()
+              e.stopPropagation()
+              return false;
+            }}
+          >
             <span style={{ flex: 1}}>{it}</span>
-            <span style={{flex: 1, textAlign: 'right'}}>x{count}</span>
+            <span style={{flex: 1, textAlign: 'right'}}>{reqs}</span>
           </div>
         )}
       </div>
