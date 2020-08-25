@@ -9,6 +9,7 @@ import { GRASS, WATER, NORTH, EAST, SOUTH, WEST, NOTHING, BANANA, GRAPES, APPLES
 export class World {
   terrain: Cartogram
   things: Cartogram
+  floors: Cartogram
   structure: Cartogram
 
   prettyTerrain: Cartogram
@@ -40,6 +41,8 @@ export class World {
 
     this.structure = new Cartogram('structure', dims)
     this.prettyStructure = new Cartogram('prettyStructure', dims)
+
+    this.floors = new Cartogram('floors', dims)
   }
 
   get width() { return this.terrain.dims.width }
@@ -115,12 +118,12 @@ export class World {
     } else if (structureId == WOODEN_FLOOR) {
       // need to actually modify terrain...?
       // or maybe a 'floor' level terrain to ensure layering
-      // this.terrain.set(x,y,)
-      console.warn('would build floor...')
+        console.warn('would build floor...')
+      if (this.terrain.at(x+1,y) == GRASS && this.terrain.at(x,y+1) == GRASS && this.terrain.at(x+1,y+1) == GRASS) {
+        this.floors.set(x, y, WOODEN_FLOOR)
+      }
+      // }
     }
-    // this.prettify
-    // this.assemblePrett
-    // this.structure
   }
   
 
@@ -187,17 +190,28 @@ export class World {
     })
   }
 
+  isTerrainClear(x: number, y: number): boolean {
+    let terrain = this.terrain.at(x,y)
+    return terrain == GRASS
+  }
+
+  isPositionPassable(x: number, y: number): boolean {
+    let building = this.structure.at(x,y)
+    return this.isTerrainClear(x,y)
+        && (building == NOTHING || building == undefined || building == WOODEN_DOOR_OPEN)
+  }
 
   // 
   isPositionClear(x: number, y: number): boolean {
-    let terrain = this.terrain.at(x,y)
-    let thing = this.things.at(x, y)
-    let building = this.structure.at(x,y)
-    let isClear = (terrain == GRASS) // || terrain == TREES)
-        // && (thing == NOTHING || thing == undefined)
-        && (building == NOTHING || building == undefined || building == WOODEN_DOOR_OPEN)
+    return this.isTerrainClear(x,y) && this.isPositionPassable(x,y)
+    //let terrain = this.terrain.at(x,y)
+    //let thing = this.things.at(x, y)
+    //let building = this.structure.at(x,y)
+    //let isClear = (terrain == GRASS) // || terrain == TREES)
+    //    // && (thing == NOTHING || thing == undefined)
+    //    && (building == NOTHING || building == undefined || building == WOODEN_DOOR_OPEN)
 
-    return isClear
+    //return isClear
   }
 
   get randomClearPosition(): WorldPosition {

@@ -6,9 +6,10 @@ import { SpriteSheets } from '../../resources';
 export class Environs {
   terrainTiles: ex.TileMap;
   thingTiles: ex.TileMap;
+  floorTiles: ex.TileMap;
   structureTiles: ex.TileMap;
 
-  get tilemaps() { return [this.terrainTiles, this.thingTiles, this.structureTiles]; }
+  get tilemaps() { return [this.terrainTiles, this.floorTiles, this.thingTiles, this.structureTiles]; }
   get terrainSource() { return this.game.world.prettyTerrain; }
   get structureSource() { return this.game.world.prettyStructure; }
 
@@ -50,6 +51,17 @@ export class Environs {
       this.game.world.width - 1);
     this.structureTiles.registerSpriteSheet('structure', SpriteSheets.Structure);
 
+    let floorMapOrigin = terrainMapOrigin;
+    this.floorTiles = new ex.TileMap(
+      floorMapOrigin[0],
+      floorMapOrigin[1],
+      OVERWORLD_CELL_SIZE,
+      OVERWORLD_CELL_SIZE,
+      this.game.world.height - 1,
+      this.game.world.width - 1);
+    this.floorTiles.registerSpriteSheet('floor', SpriteSheets.Floor);
+
+
   }
 
   paveTerrain() {
@@ -85,6 +97,20 @@ export class Environs {
       }
     });
     // this._game = engine
+  }
+
+  assembleFloor() {
+    this.game.world.floors.eachPosition((x, y) => {
+      let cell = this.floorTiles.getCell(x, y);
+      if (cell) {
+        let val = this.game.world.floors.at(x, y)
+        cell.clearSprites()
+        if (val !== NOTHING) {
+          let sprite = new ex.TileSprite('floor', this.game.world.floors.at(x, y))
+          cell.pushSprite(sprite)
+        }
+      }
+    })
   }
 
   assembleStructures() {

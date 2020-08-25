@@ -20,6 +20,9 @@ export const PEASANT_IDLE = 'peasant/idle'
 export const GRASS = 0;
 export const WATER = 1;
 export const TREES = 3;
+
+// floors
+export const WOODEN_FLOOR = 0;
 // export const MOUNTAIN = 2;
 
 const ALL_GRASS = [0,3,4,5,20,44]
@@ -85,7 +88,7 @@ export const FIRE = 1;
 export const WOODEN_WALL = 1;
 export const WOODEN_DOOR_CLOSED = 2;
 export const WOODEN_DOOR_OPEN = 3;
-export const WOODEN_FLOOR = 4;
+
 
 export const WOODEN_WALL_CONNECTIONS = [
   // north east south west

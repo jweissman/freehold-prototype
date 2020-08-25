@@ -32,8 +32,8 @@ export class Cursor extends Actor {
     super({
       width: OVERWORLD_CELL_SIZE,
       height: OVERWORLD_CELL_SIZE,
-      color: Color.Black,
-      opacity: 0.3,
+      // color: Color.Black,
+      opacity: 0.1,
     })
   }
 
@@ -59,11 +59,18 @@ export class Cursor extends Actor {
       this.pluckedStructure.visible = true
       if (constructing === 'Wood Wall') {
         this.pluckedStructure.setDrawing('wall')
+        this.pluckedStructure.anchor = new Vector(0.5,0.5)
+        // this.anchor = new Vector(0.5,0.5)
       } else if (constructing === 'Wood Floor') {
         this.pluckedStructure.setDrawing('floor')
+        this.pluckedStructure.anchor = new Vector(0,0)
+        // this.anchor = new Vector(0,0)
       } else if (constructing === 'Wood Door') {
         this.pluckedStructure.setDrawing('door')
+        this.pluckedStructure.anchor = new Vector(0.5,0.5)
+        // this.anchor = new Vector(0.5,0.5)
       } else {
+        console.warn("Don't know how to build: " + constructing)
       }
     } else {
       this.pluckedStructure.visible = false

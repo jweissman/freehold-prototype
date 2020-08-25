@@ -57,14 +57,18 @@ export class Play extends Scene {
     console.log("would build structure...")
     let { constructing } = GameStateProvider.getGlobal()
     let [x,y] = this.cursor.hoverWorldPos
-    if (constructing && this._game.world.isPositionClear(x,y)) { //terrain.at(x,y) == GRASS) {
+    if (constructing && this._game.world.isTerrainClear(x,y)) { //terrain.at(x,y) == GRASS) {
       let structureId = this.constructionLegend[constructing]
       this._game.world.build(x,y, structureId)
+      this.environs.assembleFloor()
       this.environs.assembleStructures()
     }
   }
 
   handlePlayerInput() {
+    if (this._game.input.keyboard.isHeld(Input.Keys.Esc)) {
+      GameStateProvider.setGlobal({ constructing: null })
+    }
     if (this._game.input.keyboard.isHeld(Input.Keys.Q)) {
       this._game.hud.toggleInspect()
       // GameStateProvider.setGlobal({ inspect: !GameStateProvider.getGlobal().inspect })
